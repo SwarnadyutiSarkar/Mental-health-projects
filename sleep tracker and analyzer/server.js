@@ -45,3 +45,29 @@ app.get('/api/sleep', async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files (like CSS and JavaScript)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Routes
+const appRoutes = require('./routes/appRoutes');
+app.use('/', appRoutes);
+
+// Error Handling
+app.use((req, res, next) => {
+    res.status(404).send('Page Not Found');
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
